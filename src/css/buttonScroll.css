@@ -1,0 +1,155 @@
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/green.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/violet.css';
+
+.scrollbar-container {
+    position: absolute;
+    height: auto;
+    width: 70px;
+}
+
+.button-list {
+    position: relative;
+    /* Adjust spacing */
+    padding: 10px;
+    background-color: var(--violet-8);
+    border-radius: 35px;
+    box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+    
+    overflow: hidden;
+}
+
+.scroll-button,
+.scroll-button-loop {
+    user-select: none;
+    position: absolute;
+    background-color: var(--violet-6);
+    box-shadow: hsl(206 22% 7% / 35%) 0px 10px 10px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+    color: var(--violet-11);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transform: rotate(0), scale(1);
+    /* Make buttons circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 50px;
+    /* Center text vertically */
+    /* Set initial opacity for disabled buttons */
+    transition: background-color 150ms ease-in-out, color 150ms ease-in-out, transform 150ms ease-in-out; 
+    z-index: 9;
+}
+
+.scroll-button-loop:disabled {
+    transform: scale(1);
+    z-index: 8;
+}
+
+.scroll-button:disabled {
+    transform: scale(1);
+    z-index: 8;
+    background-color: var(--mauve-2);
+    color: var(--mauve-8);
+}
+
+.scroll-button:not([disabled]):hover,
+.scroll-button-loop:not([disabled]):hover {
+    transform: scale(1.1);
+}
+
+.scroll-button-loop.active {
+    transform: scale(1.1);
+}
+
+.scroll-button-loop.active:hover {
+    transform: scale(1.2);
+}
+
+button {
+    all: unset;
+}
+
+.TooltipContent {
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 15px;
+    line-height: 1;
+    color: var(--violet-11);
+    background-color: white;
+    box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+    user-select: none;
+    animation-duration: 400ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+    z-index: 11;
+}
+
+.TooltipContent[data-state='delayed-open'][data-side='top'] {
+    animation-name: slideDownAndFade;
+}
+
+.TooltipContent[data-state='delayed-open'][data-side='right'] {
+    animation-name: slideLeftAndFade;
+}
+
+.TooltipContent[data-state='delayed-open'][data-side='bottom'] {
+    animation-name: slideUpAndFade;
+}
+
+.TooltipContent[data-state='delayed-open'][data-side='left'] {
+    animation-name: slideRightAndFade;
+}
+
+.TooltipArrow {
+    fill: white;
+}
+
+@keyframes slideUpAndFade {
+    from {
+        opacity: 0;
+        transform: translateY(2px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideRightAndFade {
+    from {
+        opacity: 0;
+        transform: translateX(-2px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideDownAndFade {
+    from {
+        opacity: 0;
+        transform: translateY(-2px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideLeftAndFade {
+    from {
+        opacity: 0;
+        transform: translateX(2px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
