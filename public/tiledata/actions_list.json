@@ -1,0 +1,50 @@
+{
+    "actions": [
+        {
+            "name": "Mining Node",
+            "summary": "This is a generic placeholder for multiple types of mining nodes.",
+            "description": "Make a DC {DC} Strength (Athletics) check. On a successful check, you harvest a resource according to the following table: {table}",
+            "imagePath": "/textures/name-of-texture.png"
+        },  
+        {
+          "name": "Insect Gathering",
+          "summary": "Search for valuable insects in the area.",
+          "description": "Make a DC {DC} Perception (Insight) check. On a successful check, you find one rare insect. You can then use this insect for alchemical purposes or trade it with NPCs.",
+          "imagePath": "/textures/bug-juice.png"
+        },
+        {   "name": "Hunting Trap Check",
+          "summary": "Check your hunting traps for any captured monsters.",
+          "description": "Perform a DC {DC} Intelligence (Investigation) check. Each trap has a chance of resulting in a monster being caught. High level monsters will have lower chances of being caught in a trap.",
+          "imagePath": "/textures/trap-check.png"
+        },   
+        {
+          "name": "Carving Monster Parts",
+          "summary": "Utilize your skills to carve valuable resources from a defeated monster.",
+          "description": "Make a DC {DC} Dexterity (Sleight of Hand) check. The difficulty is based on the monster's size and the rarity of the part. Successfully carving a rare part will grant you experience points and valuable resources.",
+          "imagePath": "/textures/carving-knife.png"
+        },
+        {
+          "name": "Supply Box Check",
+          "summary": "Check supplied crates left by hunters who have passed through this area.",
+          "description": "Perform a DC {DC} Perception (Insight) check. You may find useful items like potions, bombs, tools, or even rare monster parts that other hunters have overlooked.",
+          "imagePath": "/textures/supply-crate.png"
+        },
+        {
+          "name": "Tree Climbing",
+          "summary": "Scale the treacherous heights of ancient trees.",
+          "description": "Make a DC {DC} Strength (Athletics) check. Climbing trees allows you to reach higher vantage points, spot monsters from a distance, or even gather rare tree-dwelling insects.",
+          "imagePath": "/textures/tree-climbing.png"
+        },  {
+          "name": "River Fishing",
+          "summary": "Cast your line in the hopes of catching a rare fish.",
+          "description": "Make a DC {DC} Dexterity (Stealth) check. Fishing requires patience and skill. You must remain hidden while waiting for the perfect bite. A successful check reveals a fish worth taking.",
+          "imagePath": "/textures/fishing-rod.png"
+        }, 
+        {
+          "name": "Campfire Cooking",
+          "summary": "Rest, heal wounds, and prepare a meal at the campfire.",
+          "description": "You can heal a number of hit points equal to twice your proficiency bonus. Additionally, while at camp you can prepare simple meals that grant temporary bonuses to abilities based on the ingredients used.",
+          "imagePath": "/textures/campfire.png"
+         }
+    ]
+}
