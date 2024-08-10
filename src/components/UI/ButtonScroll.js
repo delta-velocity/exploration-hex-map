@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { create } from 'zustand';
 import '../../css/buttonScroll.css';
@@ -54,53 +56,53 @@ function ButtonScroll({ numButtons, buttonsVisible, sections }) {
         return refs;
     }, [numButtons]);
 
-// #####################################################################
+    // #####################################################################
 
-function handlePrevSection(scrollPosition, sectionIndices) {
-    // Find nearest section start BELOW or EQUAL to current position
-    let nearestSectionIndex = sectionIndices.filter(start => start <= scrollPosition).length - 1;
-  
-    // If already at the bottom of a section or at the start of the first, go to the previous section's bottom
-    if (
-      scrollPosition >= sectionIndices[nearestSectionIndex + 1] || 
-      nearestSectionIndex === 0 
-    ) {
-      nearestSectionIndex = Math.max(0, nearestSectionIndex - 1); // Prevent negative
+    function handlePrevSection(scrollPosition, sectionIndices) {
+        // Find nearest section start BELOW or EQUAL to current position
+        let nearestSectionIndex = sectionIndices.filter(start => start <= scrollPosition).length - 1;
+
+        // If already at the bottom of a section or at the start of the first, go to the previous section's bottom
+        if (
+            scrollPosition >= sectionIndices[nearestSectionIndex + 1] ||
+            nearestSectionIndex === 0
+        ) {
+            nearestSectionIndex = Math.max(0, nearestSectionIndex - 1); // Prevent negative
+        }
+
+        const newScrollPosition = sectionIndices[nearestSectionIndex + 1] - 1 || 0; // Subtract 1 to target the bottom
+        return newScrollPosition;
     }
-  
-    const newScrollPosition = sectionIndices[nearestSectionIndex + 1] - 1 || 0; // Subtract 1 to target the bottom
-    return newScrollPosition; 
-  }
-  
-  function handleNextSection(scrollPosition, sectionIndices, numButtons) {
-    // Find nearest section start ABOVE the current position
-    let nearestSectionIndex = sectionIndices.findIndex(start => start > scrollPosition);
-  
-    // If already at the bottom of the last section, stay there
-    if (nearestSectionIndex === -1 || scrollPosition >= sectionIndices[numButtons - 1]) {
-      return scrollPosition; 
+
+    function handleNextSection(scrollPosition, sectionIndices, numButtons) {
+        // Find nearest section start ABOVE the current position
+        let nearestSectionIndex = sectionIndices.findIndex(start => start > scrollPosition);
+
+        // If already at the bottom of the last section, stay there
+        if (nearestSectionIndex === -1 || scrollPosition >= sectionIndices[numButtons - 1]) {
+            return scrollPosition;
+        }
+
+        // If already at the bottom of a section, go to the next section's bottom 
+        if (scrollPosition >= sectionIndices[nearestSectionIndex + 1]) {
+            nearestSectionIndex++;
+        }
+
+        const newScrollPosition = sectionIndices[nearestSectionIndex + 1] - 1 || 0; // Subtract 1 to target the bottom
+        return newScrollPosition;
     }
-  
-    // If already at the bottom of a section, go to the next section's bottom 
-    if (scrollPosition >= sectionIndices[nearestSectionIndex + 1]) {
-        nearestSectionIndex++; 
-    }
-  
-    const newScrollPosition = sectionIndices[nearestSectionIndex + 1] - 1 || 0; // Subtract 1 to target the bottom
-    return newScrollPosition;
-  }
 
-const handlePrevClick = () => {
-    const newScrollPosition = handlePrevSection(scrollPosition, sectionIndices);
-    scrollTo(newScrollPosition);
-};
+    const handlePrevClick = () => {
+        const newScrollPosition = handlePrevSection(scrollPosition, sectionIndices);
+        scrollTo(newScrollPosition);
+    };
 
-const handleNextClick = () => {
-    const newScrollPosition = handleNextSection(scrollPosition, sectionIndices);
-    scrollTo(newScrollPosition);
-};
+    const handleNextClick = () => {
+        const newScrollPosition = handleNextSection(scrollPosition, sectionIndices);
+        scrollTo(newScrollPosition);
+    };
 
-// #####################################################################
+    // #####################################################################
 
     function findButtonHeightByIndices(indexOfButton, currentSelectedIndex) {
         let adjustedIndex = buttonsVisible + indexOfButton - currentSelectedIndex;
@@ -206,11 +208,12 @@ const handleNextClick = () => {
     const scrollbarHeight = (buttonsVisible * 2 + 4) * 60 + 70;
     return (
         <Tooltip.Provider>
-            <div className="scrollbar-container" onWheel={handleWheel} style={{ top: `${window.innerHeight / 2 - scrollbarHeight / 2}px`, left: '50px' }}>
+            {/* <div className="scrollbar-container" onWheel={handleWheel} style={{ top: `${window.innerHeight / 2 - scrollbarHeight / 2}px`, left: '50px' }}> */}
+            <div className="scrollbar-container" onWheel={handleWheel} style={{ top: `${800 - scrollbarHeight / 2}px`, left: '50px' }}>
                 <div className="button-list" style={{ height: `${scrollbarHeight}px` }}>
                     <Tooltip.Root>
                         <Tooltip.Trigger className={`scroll-button`} onClick={() => handleButtonClick(1)} disabled={scrollPosition == 1} style={{ top: '10px', left: '10px' }}>
-                                <UploadIcon />
+                            <UploadIcon />
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
                             <Tooltip.Content side="right" className="TooltipContent" sideOffset={5}>
@@ -221,7 +224,7 @@ const handleNextClick = () => {
                     </Tooltip.Root>
                     <Tooltip.Root>
                         <Tooltip.Trigger className={`scroll-button`} onClick={handlePrevClick} style={{ top: '70px', left: '10px' }}>
-                                <PinTopIcon />
+                            <PinTopIcon />
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
                             <Tooltip.Content side="right" className="TooltipContent" sideOffset={5}>
@@ -233,7 +236,7 @@ const handleNextClick = () => {
                     {buttons}
                     <Tooltip.Root>
                         <Tooltip.Trigger className={`scroll-button`} onClick={handleNextClick} style={{ bottom: '70px', left: '10px' }}>
-                                <PinBottomIcon />
+                            <PinBottomIcon />
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
                             <Tooltip.Content side="right" className="TooltipContent" sideOffset={5}>
@@ -244,7 +247,7 @@ const handleNextClick = () => {
                     </Tooltip.Root>
                     <Tooltip.Root>
                         <Tooltip.Trigger className={`scroll-button`} disabled={scrollPosition == numButtons} onClick={() => handleButtonClick(numButtons)} style={{ bottom: '10px', left: '10px' }}>
-                                <DownloadIcon />
+                            <DownloadIcon />
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
                             <Tooltip.Content side="right" className="TooltipContent" sideOffset={5}>

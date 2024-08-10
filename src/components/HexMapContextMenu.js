@@ -16,6 +16,7 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
     const [clickHexPosition, setClickHexPosition] = useState({ q: 0, r: 0 });
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [buttonsVisible, setButtonsVisible] = useState(0);
 
     const { mapData, addLayer, addTile } = useMapStore();
 
@@ -45,9 +46,8 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
     // useEffect and return
     useEffect(() => {
         setTileExists(true);
+        setButtonsVisible(Math.floor((window.innerHeight - 350) / 120));
     }, [clickPosition]);
-
-    const buttonsShouldBeVisible = Math.floor((window.innerHeight - 350) / 120);
 
     const [inputValue, setInputValue] = useState(''); // Initialize input value state
 
@@ -101,7 +101,7 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
                     </DraggableWindow>
                 )}
 
-                <ButtonScroll numButtons={18} buttonsVisible={buttonsShouldBeVisible} sections={[1, 4, 7]}></ButtonScroll>
+                <ButtonScroll numButtons={18} buttonsVisible={buttonsVisible} sections={[1, 4, 7]}></ButtonScroll>
             </ContextMenu.Trigger>
             <ContextMenu.Portal>
                 <ContextMenu.Content className="ContextMenuContent" sideOffset={5} align="end">

@@ -16,7 +16,7 @@ class TerrainDetail {
 function TerrainDetailModel({ position, scale, animation, texture }) {
     const ref = useRef(null);
     const animRef = useRef(null);
-    const textureMap = useTexture(texture);
+    // const textureMap = useTexture(texture);
 
     useFrame(({ camera, clock }) => {
         if (ref.current) {
@@ -31,7 +31,7 @@ function TerrainDetailModel({ position, scale, animation, texture }) {
         <group ref={animRef} position={position}>
             <mesh ref={ref} scale={scale}>
                 <planeGeometry args={[1, 1]} />
-                <meshBasicMaterial map={textureMap} />
+                {/* <meshBasicMaterial map={textureMap} /> */}
             </mesh>
         </group>
     );
@@ -84,7 +84,7 @@ function TileModel({ terrainDetails }) {
             <HexagonalPrism sideLength={sideLength} height={height} />
             {terrainDetails.map((terrainDetail, i) => {
                 const position = [terrainDetail.xOffset, terrainDetail.yOffset, (terrainDetail.isTop ? height / 2 : -height / 2)];
-                return <TerrainDetailModel position={position} scale={1} animation={swayTree} texture={'/textures/tree.png'} />
+                return <TerrainDetailModel position={position} scale={1} animation={swayTree} />
 
             })}
         </group>
