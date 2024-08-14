@@ -1,27 +1,12 @@
 'use client'
 
-import React, { useRef, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import Tile, { TerrainDetail, TileModel } from './objects/Tile';
+import React from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import Tile from './objects/Tile';
 import CameraControls from './camera/Camera';
 import { Color, Quaternion, Vector3 } from 'three';
 import { HexMapData, TileData, TileVector } from '@/mapdata/MapData';
 import useCameraStore from './camera/CameraStore';
-import { importWorldActions } from '@/mapdata/MapReader';
-
-
-// Function or script where you want to use the imported data
-async function fetchAndDisplayActions() {
-  try {
-    const actions = await importWorldActions();
-    console.log('Imported actions:', actions);
-
-    // Now you can use the actions array which contains WorldAction class instances
-    // Perform any further operations with the imported data here
-  } catch (error) {
-    console.error('Error fetching and displaying actions:', error);
-  }
-}
 
 function Background({ color }) {
     const { scene } = useThree();
@@ -37,12 +22,12 @@ function swayTree(obj, elapsedTime) {
 
 const MapRenderer = () => {
     const {
-      setTargetPosition,
-      setTargetRotation,
-      setTargetFov,
-      setTargetZoom,
-      setTargetNear,
-      setTargetFar,
+        setTargetPosition,
+        setTargetRotation,
+        setTargetFov,
+        setTargetZoom,
+        setTargetNear,
+        setTargetFar,
     } = useCameraStore();
 
     const handleRotate = (position, rotation) => {
@@ -77,28 +62,16 @@ const MapRenderer = () => {
     });
 
     return (
-        <>
-            <div>
-                <button onClick={() => handleRotate(new Vector3(10, 0, 0), new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI / 2))}>
-                    Rotate to position 1
-                </button>
-                <button onClick={() => handleRotate(new Vector3(0, 10, 0), new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), Math.PI / 2))}>
-                    Rotate to position 2
-                </button>
-                <button onClick={handleSwitchProjection}>Switch projection</button>
-                <button onClick={handleRandomPerspective}>Random perspective</button>
-            </div>
-            <Canvas style={{ height: '100vh', width: '100vw' }}>
-                <CameraControls />
-                <Background color={'#88ccff'} />
-                <ambientLight intensity={0.5} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-                <pointLight position={[-10, -10, -10]} />
-                {Object.values(map.layers['layer1'].tiles).map((tile, index) => (
-                    <Tile key={index} tileData={tile} />
-                ))}
-            </Canvas>
-        </>
+        <Canvas style={{ height: '100vh', width: '100vw' }}>
+            <CameraControls />
+            <Background color={'#88ccff'} />
+            <ambientLight intensity={0.5} />
+            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+            <pointLight position={[-10, -10, -10]} />
+            {Object.values(map.layers['layer1'].tiles).map((tile, index) => (
+                <Tile key={index} tileData={tile} />
+            ))}
+        </Canvas>
     );
 }
 

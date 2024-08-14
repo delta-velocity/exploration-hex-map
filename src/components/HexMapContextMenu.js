@@ -5,9 +5,12 @@ import { DotFilledIcon, CheckIcon, ChevronRightIcon } from '@radix-ui/react-icon
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import DraggableWindow from './UI/Popup';
 import { selectHexagon } from '../helpers/hexes.js'
-import ButtonScroll from './UI/ButtonScroll.js';
 import { HexMapData, TileData, TileLayer, TileVector, useMapStore } from '../mapdata/MapData.ts';
 import '../css/contextMenu.css';
+import dynamic from 'next/dynamic';
+const ButtonScroll = dynamic(() => import('./UI/ButtonScroll.js'), {
+    ssr: false
+});
 
 
 function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
@@ -52,17 +55,17 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
     const [inputValue, setInputValue] = useState(''); // Initialize input value state
 
     const handleInputChange = (e) => {
-      setInputValue(e.target.value); // Update input value state on change
+        setInputValue(e.target.value); // Update input value state on change
     };
-  
+
     const handleSubmit = () => {
-      // Call the update function here, passing the inputValue
-      // For example: updateStore(inputValue);
-      setIsEditOpen(false); // Close the popup after submitting
+        // Call the update function here, passing the inputValue
+        // For example: updateStore(inputValue);
+        setIsEditOpen(false); // Close the popup after submitting
     };
-  
+
     const handleCancel = () => {
-      setIsEditOpen(false); // Close the popup on cancel
+        setIsEditOpen(false); // Close the popup on cancel
     };
 
     return (
@@ -89,15 +92,15 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
 
                 {isEditOpen && (
                     <DraggableWindow title="Edit Hex" handleClose={() => setIsEditOpen(false)} startPosition={clickPosition}>
-                    <h2>Edit Data</h2>
-                    <input
-                      type="text"
-                      value={inputValue}
-                      onChange={handleInputChange}
-                      placeholder="Enter new value"
-                    />
-                    <button onClick={handleSubmit}>Submit</button>
-                    <button onClick={handleCancel}>Cancel</button>
+                        <h2>Edit Data</h2>
+                        <input
+                            type="text"
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            placeholder="Enter new value"
+                        />
+                        <button onClick={handleSubmit}>Submit</button>
+                        <button onClick={handleCancel}>Cancel</button>
                     </DraggableWindow>
                 )}
 

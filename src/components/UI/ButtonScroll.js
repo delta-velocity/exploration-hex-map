@@ -56,8 +56,6 @@ function ButtonScroll({ numButtons, buttonsVisible, sections }) {
         return refs;
     }, [numButtons]);
 
-    // #####################################################################
-
     function handlePrevSection(scrollPosition, sectionIndices) {
         // Find nearest section start BELOW or EQUAL to current position
         let nearestSectionIndex = sectionIndices.filter(start => start <= scrollPosition).length - 1;
@@ -101,8 +99,6 @@ function ButtonScroll({ numButtons, buttonsVisible, sections }) {
         const newScrollPosition = handleNextSection(scrollPosition, sectionIndices);
         scrollTo(newScrollPosition);
     };
-
-    // #####################################################################
 
     function findButtonHeightByIndices(indexOfButton, currentSelectedIndex) {
         let adjustedIndex = buttonsVisible + indexOfButton - currentSelectedIndex;
@@ -208,8 +204,7 @@ function ButtonScroll({ numButtons, buttonsVisible, sections }) {
     const scrollbarHeight = (buttonsVisible * 2 + 4) * 60 + 70;
     return (
         <Tooltip.Provider>
-            {/* <div className="scrollbar-container" onWheel={handleWheel} style={{ top: `${window.innerHeight / 2 - scrollbarHeight / 2}px`, left: '50px' }}> */}
-            <div className="scrollbar-container" onWheel={handleWheel} style={{ top: `${800 - scrollbarHeight / 2}px`, left: '50px' }}>
+            <div className="scrollbar-container" onWheel={handleWheel} style={{ top: `${window.innerHeight / 2 - scrollbarHeight / 2}px`, left: '50px' }}>
                 <div className="button-list" style={{ height: `${scrollbarHeight}px` }}>
                     <Tooltip.Root>
                         <Tooltip.Trigger className={`scroll-button`} onClick={() => handleButtonClick(1)} disabled={scrollPosition == 1} style={{ top: '10px', left: '10px' }}>
