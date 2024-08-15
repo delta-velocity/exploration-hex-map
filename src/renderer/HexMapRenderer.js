@@ -7,6 +7,7 @@ import CameraControls from './camera/Camera';
 import { Color, Quaternion, Vector3 } from 'three';
 import { HexMapData, TileData, TileVector } from '@/mapdata/MapData';
 import useCameraStore from './camera/CameraStore';
+import { OrbitControls } from '@react-three/drei';
 
 function Background({ color }) {
     const { scene } = useThree();
@@ -63,7 +64,7 @@ const MapRenderer = () => {
 
     return (
         <Canvas style={{ height: '100vh', width: '100vw' }}>
-            <CameraControls />
+            <OrbitControls />
             <Background color={'#88ccff'} />
             <ambientLight intensity={0.5} />
             <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />

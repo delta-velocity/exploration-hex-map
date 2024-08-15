@@ -93,7 +93,6 @@ function TileModel({ terrainDetails }) {
 
 
 const Tile = ({ tileData }) => {
-    const { camera } = useThree();
     const tileVector = tileData.location;
 
     // Calculate the position of the tile based on the TileVector coordinates
