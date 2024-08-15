@@ -75,18 +75,10 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
 
                 {isAddOpen && (
                     <DraggableWindow title="Add Hex" handleClose={() => setIsAddOpen(false)} startPosition={clickPosition}>
-                        aaaaaaaaaaaaaaaaaaaaaaa
-                        <button onClick={() => {
-                            addLayer("1");
-                            addLayer("2");
-                        }}>layers</button>
-                        {Object.keys(mapData.layers).length}
-                        <button onClick={() => {
-                            const tile = new TileData(new TileVector(0, 0, 0, 0), "default");
-                            addTile("0", tile);
-                        }}>tiles</button>
-                        {Object.keys(mapData.layers["0"].tiles).length}
-                        aaaaaaaaaaaaaaaaaaaaaaa
+                        <div>
+                            aaaaaaaaaaaaaaaaaaaaaaa
+                            aaaaaaaaaaaaaaaaaaaaaaa
+                        </div>
                     </DraggableWindow>
                 )}
 

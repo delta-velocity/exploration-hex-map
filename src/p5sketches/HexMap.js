@@ -229,7 +229,7 @@ const HexMap = ({ selectedLayer, hexSize, panOffset }) => {
         return () => {
             newSketch.remove(); // Remove the previous sketch instance
         };
-    }, [mapData, selectedLayer, hexSize]);
+    }, [mapData, selectedLayer, hexSize, sketch]);
 
     return (
         <div ref={sketchRef} />

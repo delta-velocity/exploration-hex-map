@@ -108,7 +108,7 @@ const GameMap = () => {
         });
 
         mapContext.hexMap = newMap;
-    }, []);
+    }, [mapContext]);
 
     return (
         <HexMapContextMenu

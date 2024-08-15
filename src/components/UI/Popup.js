@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { Separator } from '@radix-ui/react-context-menu';
 import * as Collapsible from '@radix-ui/react-collapsible';
