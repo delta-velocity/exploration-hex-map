@@ -29,20 +29,6 @@ const ScrollButton = ({ onClick, active, children, disabled, buttonRef, buttonSt
     );
 };
 
-const ControlButton = React.forwardRef(({ onClick, children, disabled, style }, ref) => {
-    return (
-        <button
-            ref={ref} // Attach the forwarded ref
-            disabled={disabled}
-            className={`scroll-button`}
-            onClick={!disabled ? onClick : () => { }}
-            style={style}
-        >
-            {children}
-        </button>
-    );
-});
-
 function ButtonScroll({ numButtons, buttonsVisible, sections }) {
     const { scrollPosition, setScrollPosition } = useScrollPosition();
     let currentIndex = 1;
