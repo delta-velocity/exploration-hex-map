@@ -82,9 +82,9 @@ function TileModel({ terrainDetails }) {
         <group ref={groupRef}>
             <Hexagon radius={1} holeRadius={0.5} height={height} />
             <HexagonalPrism sideLength={sideLength} height={height} />
-            {terrainDetails.map((terrainDetail, key) => {
+            {terrainDetails.map((terrainDetail, i) => {
                 const position = [terrainDetail.xOffset, terrainDetail.yOffset, (terrainDetail.isTop ? height / 2 : -height / 2)];
-                return <TerrainDetailModel position={position} scale={1} animation={swayTree} />
+                return <TerrainDetailModel key={i} position={position} scale={1} animation={swayTree} />
 
             })}
         </group>

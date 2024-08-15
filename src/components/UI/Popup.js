@@ -135,7 +135,7 @@ const DraggableWindow = ({ children, title, handleClose, startPosition }) => {
                 }, 1);
             }
         }
-    });
+    }, [intitial]);
 
     useEffect(() => {
         const width = expandedSize.width;
@@ -151,7 +151,7 @@ const DraggableWindow = ({ children, title, handleClose, startPosition }) => {
         ref.current.style.top = newTop + 'px';
 
         showContent(ref);
-    }, [expandedSize]);
+    }, [expandedSize, startPosition]);
 
     return (
         <div ref={ref} className="draggable-window" onMouseDown={onMouseDown}>
