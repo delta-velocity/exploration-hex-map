@@ -8,6 +8,7 @@ import { Color, Quaternion, Vector3 } from 'three';
 import { HexMapData, TileData, TileVector } from '@/mapdata/MapData';
 import useCameraStore from './camera/CameraStore';
 import { OrbitControls } from '@react-three/drei';
+import usePreloadTextures from '@/hooks/usePreloadTextures';
 
 function Background({ color }) {
     const { scene } = useThree();
@@ -61,6 +62,8 @@ const MapRenderer = () => {
             { xOffset: 0, yOffset: 0, isTop: false },
         ];
     });
+
+    usePreloadTextures()
 
     return (
         <Canvas style={{ height: '100vh', width: '100vw' }}>
