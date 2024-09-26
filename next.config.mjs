@@ -13,6 +13,10 @@ const nextConfig = {
                 ]
             }
         ]
+    },
+    basePath: '/exploration-hex-map',
+    env: {
+        basePath: '/exploration-hex-map'
     }
 };
 
