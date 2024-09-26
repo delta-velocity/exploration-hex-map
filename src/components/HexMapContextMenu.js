@@ -21,8 +21,6 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [buttonsVisible, setButtonsVisible] = useState(0);
 
-    const { mapData, addLayer, addTile } = useMapStore();
-
     const changeZoom = (event) => {
     };
 
@@ -67,7 +65,6 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
     const handleCancel = () => {
         setIsEditOpen(false); // Close the popup on cancel
     };
-
     return (
         <ContextMenu.Root>
             <ContextMenu.Trigger onContextMenu={(e) => handleContextMenu(e)}>

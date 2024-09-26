@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import { useTexture } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import Hexagon from './Hexagon';
+import { useTextureStore } from '../preloader/TexturePreloader';
 
 class TerrainDetail {
     constructor(icon, xOffset, yOffset, isTop) {
@@ -16,7 +16,6 @@ class TerrainDetail {
 function TerrainDetailModel({ position, scale, animation, texture }) {
     const ref = useRef(null);
     const animRef = useRef(null);
-    // const textureMap = useTexture(texture);
 
     useFrame(({ camera, clock }) => {
         if (ref.current) {
@@ -26,12 +25,11 @@ function TerrainDetailModel({ position, scale, animation, texture }) {
             animation(animRef.current, clock.elapsedTime);
         }
     });
-
     return (
         <group ref={animRef} position={position}>
             <mesh ref={ref} scale={scale}>
                 <planeGeometry args={[1, 1]} />
-                {/* <meshBasicMaterial map={textureMap} /> */}
+                <meshBasicMaterial map={texture} transparent={true}/>
             </mesh>
         </group>
     );
@@ -67,7 +65,6 @@ function TileModel({ terrainDetails }) {
     const groupRef = useRef();
     const sideLength = 1;
     const height = 1;
-    const { scene, camera, size } = useThree();
 
     function swayTree(obj, elapsedTime) {
         obj.rotation.z = Math.sin(elapsedTime) * 0.1;
@@ -77,15 +74,18 @@ function TileModel({ terrainDetails }) {
         if (groupRef.current) {
         }
     }, [terrainDetails, height]);
-
+    
+    const { textures } = useTextureStore();
+    const lushTexture = textures.hex.base.lush;
+    const blankTexture = textures.hex.base.blank;
+    
     return (
         <group ref={groupRef}>
             <Hexagon radius={1} holeRadius={0.5} height={height} />
             <HexagonalPrism sideLength={sideLength} height={height} />
             {terrainDetails.map((terrainDetail, i) => {
                 const position = [terrainDetail.xOffset, terrainDetail.yOffset, (terrainDetail.isTop ? height / 2 : -height / 2)];
-                return <TerrainDetailModel key={i} position={position} scale={1} animation={swayTree} />
-
+                return <TerrainDetailModel key={i} position={position} scale={1} animation={swayTree} texture={i % 2 == 0 ? blankTexture : lushTexture} />
             })}
         </group>
     );
@@ -93,7 +93,6 @@ function TileModel({ terrainDetails }) {
 
 
 const Tile = ({ tileData }) => {
-    const { camera } = useThree();
     const tileVector = tileData.location;
 
     // Calculate the position of the tile based on the TileVector coordinates
@@ -101,7 +100,7 @@ const Tile = ({ tileData }) => {
         tileVector.q * Math.sqrt(3) + tileVector.r * Math.sqrt(3) / 2,
         0,
         tileVector.r * 1.5 // assuming 2D map, adjust for 3D if needed
-      ];
+    ];
 
     return (
         <group position={position}>
