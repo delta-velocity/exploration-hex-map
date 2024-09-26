@@ -1,6 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import { useTexture } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import Hexagon from './Hexagon';
 import { useTextureStore } from '../preloader/TexturePreloader';
@@ -53,7 +52,7 @@ function HexagonalPrism() {
 
             // Create the mesh for the faces
             const mesh = new THREE.Mesh(smallGeometry, material);
-            //meshRef.current.add(mesh);
+            meshRef.current.add(mesh);
         }
     }, []);
 
@@ -66,7 +65,6 @@ function TileModel({ terrainDetails }) {
     const groupRef = useRef();
     const sideLength = 1;
     const height = 1;
-    const { scene, camera, size } = useThree();
 
     function swayTree(obj, elapsedTime) {
         obj.rotation.z = Math.sin(elapsedTime) * 0.1;
