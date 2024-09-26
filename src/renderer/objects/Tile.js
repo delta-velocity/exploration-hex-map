@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
 import Hexagon from './Hexagon';
@@ -52,7 +52,7 @@ function HexagonalPrism() {
 
             // Create the mesh for the faces
             const mesh = new THREE.Mesh(smallGeometry, material);
-            meshRef.current.add(mesh);
+            // meshRef.current.add(mesh);
         }
     }, []);
 
@@ -70,14 +70,8 @@ function TileModel({ terrainDetails }) {
         obj.rotation.z = Math.sin(elapsedTime) * 0.1;
     }
 
-    useEffect(() => {
-        if (groupRef.current) {
-        }
-    }, [terrainDetails, height]);
-    
     const { textures } = useTextureStore();
     const lushTexture = textures.hex.base.lush;
-    const blankTexture = textures.hex.base.blank;
     
     return (
         <group ref={groupRef}>
@@ -85,7 +79,7 @@ function TileModel({ terrainDetails }) {
             <HexagonalPrism sideLength={sideLength} height={height} />
             {terrainDetails.map((terrainDetail, i) => {
                 const position = [terrainDetail.xOffset, terrainDetail.yOffset, (terrainDetail.isTop ? height / 2 : -height / 2)];
-                return <TerrainDetailModel key={i} position={position} scale={1} animation={swayTree} texture={i % 2 == 0 ? blankTexture : lushTexture} />
+                return <TerrainDetailModel key={i} position={position} scale={1} animation={swayTree} texture={lushTexture} />
             })}
         </group>
     );

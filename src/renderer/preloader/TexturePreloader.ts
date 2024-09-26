@@ -20,14 +20,16 @@ function setNestedValue(obj: Record<string, any>, path: string, value: any): voi
 
 interface TextureState {
     textures: Record<string, any>;
+    textureCount: number;
     setTexture: (key: string, texture: MappedTextureType<any>) => void;
 }
 
 export const useTextureStore = create<TextureState>((set) => ({
     textures: {},
+    textureCount: 0,
     setTexture: (path: string, texture: MappedTextureType<any>) =>
         set((state) => {
             setNestedValue(state.textures, path, texture);
-            return { textures: { ...state.textures } };
+            return { textures: { ...state.textures }, textureCount: state.textureCount + 1 };
         }),
 }));
