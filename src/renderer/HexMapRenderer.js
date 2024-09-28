@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { Color, Vector3 } from 'three';
 import { HexMapData, TileData, TileVector } from '@/mapdata/MapData';

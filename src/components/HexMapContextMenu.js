@@ -1,14 +1,14 @@
 'use client'
 
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import { DotFilledIcon, CheckIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import DraggableWindow from './UI/Popup';
+import { ChevronRightIcon } from '@radix-ui/react-icons';
+import React, { useState, useEffect } from 'react';
+import DraggableWindow from './UI/Popup.tsx';
 import { selectHexagon } from '../helpers/hexes.js'
-import { HexMapData, TileData, TileLayer, TileVector, useMapStore } from '../mapdata/MapData.ts';
 import '../css/contextMenu.css';
 import dynamic from 'next/dynamic';
-const ButtonScroll = dynamic(() => import('./UI/ButtonScroll.js'), {
+import { FileUpload, ObjectDownload } from './UI/FileIO';
+const ButtonScroll = dynamic(() => import('./UI/ButtonScroll.tsx'), {
     ssr: false
 });
 
@@ -65,6 +65,13 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
     const handleCancel = () => {
         setIsEditOpen(false); // Close the popup on cancel
     };
+
+    const [fileContent, setFileContent] = useState('');
+
+    const handleFileRead = (content) => {
+        console.log(content);
+        setFileContent(content);
+    };
     return (
         <ContextMenu.Root>
             <ContextMenu.Trigger onContextMenu={(e) => handleContextMenu(e)}>
@@ -73,8 +80,15 @@ function HexMapContextMenu({ children, panOffset = {}, hexSize = 40 }) {
                 {isAddOpen && (
                     <DraggableWindow title="Add Hex" handleClose={() => setIsAddOpen(false)} startPosition={clickPosition}>
                         <div>
-                            aaaaaaaaaaaaaaaaaaaaaaa
-                            aaaaaaaaaaaaaaaaaaaaaaa
+                            <h1>File Upload Example</h1>
+                            <FileUpload onFileRead={handleFileRead} />
+                            {fileContent && (
+                                <div>
+                                    <h2>File Content:</h2>
+                                    <pre>{fileContent.length}</pre>
+                                </div>
+                            )}
+                            <ObjectDownload object={fileContent} fileName='data' />
                         </div>
                     </DraggableWindow>
                 )}

@@ -1,21 +1,38 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { create } from 'zustand';
 import '../../css/buttonScroll.css';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { DownloadIcon, PinBottomIcon, PinTopIcon, UploadIcon } from '@radix-ui/react-icons';
 
-const useScrollPosition = create((set) => ({
-    scrollPosition: 1,
-    scrollUp: () => set((state) => ({ scrollPosition: state.scrollPosition - 1 })),
-    scrollDown: () => set((state) => ({ scrollPosition: state.scrollPosition + 1 })),
-    setScrollPosition: (index) => set(() => ({ scrollPosition: index })),
-}));
-const transitionScrollTime = 250;
-const sectionIndices = [1, 5, 14];
+type ScrollPositionStore = {
+    scrollPosition: number;
+    scrollUp: () => void;
+    scrollDown: () => void;
+    setScrollPosition: (index: number) => void;
+}
 
-const ScrollButton = ({ onClick, active, children, disabled, buttonRef, buttonStyle }) => {
+const useScrollPosition = create<ScrollPositionStore>((set) => ({
+    scrollPosition: 1,
+    scrollUp: () => set((state: { scrollPosition: number; }) => ({ scrollPosition: state.scrollPosition - 1 })),
+    scrollDown: () => set((state: { scrollPosition: number; }) => ({ scrollPosition: state.scrollPosition + 1 })),
+    setScrollPosition: (index: number) => set(() => ({ scrollPosition: index })),
+}));
+
+const transitionScrollTime = 250;
+const sectionIndices = [0];
+
+type ScrollButtonProps = {
+    onClick: () => void;
+    active: boolean;
+    children: React.ReactNode;
+    disabled: boolean;
+    buttonRef: React.RefObject<HTMLButtonElement>;
+    buttonStyle: React.CSSProperties;
+};
+
+const ScrollButton = ({ onClick, active, children, disabled, buttonRef, buttonStyle }: ScrollButtonProps) => {
     return (
         <button
             ref={buttonRef}
@@ -29,50 +46,42 @@ const ScrollButton = ({ onClick, active, children, disabled, buttonRef, buttonSt
     );
 };
 
-function ButtonScroll({ numButtons, buttonsVisible, sections }) {
+type ButtonScrollProps = {
+    numButtons: number;
+    buttonsVisible: number;
+    sections: number[];
+};
+
+function ButtonScroll({ numButtons, buttonsVisible, sections }: ButtonScrollProps) {
     const { scrollPosition, setScrollPosition } = useScrollPosition();
     let currentIndex = 1;
 
     const buttonRefsByIndex = useMemo(() => {
         const refs = [];
         for (let index = 1; index <= numButtons; index++) {
-            refs.push(React.createRef(null));
+            refs.push(React.createRef<HTMLButtonElement>());
         }
-
         return refs;
     }, [numButtons]);
 
-    function handlePrevSection(scrollPosition, sectionIndices) {
-        // Find nearest section start BELOW or EQUAL to current position
+    function handlePrevSection(scrollPosition: number, sectionIndices: number[]) {
         let nearestSectionIndex = sectionIndices.filter(start => start <= scrollPosition).length - 1;
-
-        // If already at the bottom of a section or at the start of the first, go to the previous section's bottom
-        if (
-            scrollPosition >= sectionIndices[nearestSectionIndex + 1] ||
-            nearestSectionIndex === 0
-        ) {
-            nearestSectionIndex = Math.max(0, nearestSectionIndex - 1); // Prevent negative
+        if (scrollPosition >= sectionIndices[nearestSectionIndex + 1] || nearestSectionIndex === 0) {
+            nearestSectionIndex = Math.max(0, nearestSectionIndex - 1);
         }
-
-        const newScrollPosition = sectionIndices[nearestSectionIndex + 1] - 1 || 0; // Subtract 1 to target the bottom
+        const newScrollPosition = sectionIndices[nearestSectionIndex + 1] - 1 || 0;
         return newScrollPosition;
     }
 
-    function handleNextSection(scrollPosition, sectionIndices, numButtons) {
-        // Find nearest section start ABOVE the current position
+    function handleNextSection(scrollPosition: number, sectionIndices: number[], numButtons: number) {
         let nearestSectionIndex = sectionIndices.findIndex(start => start > scrollPosition);
-
-        // If already at the bottom of the last section, stay there
         if (nearestSectionIndex === -1 || scrollPosition >= sectionIndices[numButtons - 1]) {
             return scrollPosition;
         }
-
-        // If already at the bottom of a section, go to the next section's bottom 
         if (scrollPosition >= sectionIndices[nearestSectionIndex + 1]) {
             nearestSectionIndex++;
         }
-
-        const newScrollPosition = sectionIndices[nearestSectionIndex + 1] - 1 || 0; // Subtract 1 to target the bottom
+        const newScrollPosition = sectionIndices[nearestSectionIndex + 1] - 1 || 0;
         return newScrollPosition;
     }
 
@@ -82,24 +91,24 @@ function ButtonScroll({ numButtons, buttonsVisible, sections }) {
     };
 
     const handleNextClick = () => {
-        const newScrollPosition = handleNextSection(scrollPosition, sectionIndices);
+        const newScrollPosition = handleNextSection(scrollPosition, sectionIndices, numButtons);
         scrollTo(newScrollPosition);
     };
 
-    function findButtonHeightByIndices(indexOfButton, currentSelectedIndex) {
+    function findButtonHeightByIndices(indexOfButton: number, currentSelectedIndex: number) {
         let adjustedIndex = buttonsVisible + indexOfButton - currentSelectedIndex;
         adjustedIndex = Math.min(adjustedIndex, buttonsVisible * 2);
         adjustedIndex = Math.max(-2, adjustedIndex);
         return (190 + (60 * adjustedIndex));
     }
 
-    function findButtonOpacityByIndices(indexOfButton, currentSelectedIndex) {
+    function findButtonOpacityByIndices(indexOfButton: number, currentSelectedIndex: number) {
         const adjustedIndex = indexOfButton - currentSelectedIndex;
         return (1 - Math.abs(adjustedIndex / (buttonsVisible + 1)));
     }
 
-    function scrollOnce(ascending, index) {
-        if ((index === 1 && !ascending) || (index === numButtons) && ascending) {
+    function scrollOnce(ascending: boolean, index: number) {
+        if ((index === 1 && !ascending) || (index === numButtons && ascending)) {
             return [];
         }
 
@@ -117,56 +126,41 @@ function ButtonScroll({ numButtons, buttonsVisible, sections }) {
         buttons.forEach(index => {
             const element = buttonRefsByIndex[index];
             requestAnimationFrame(() => {
-                element.current.style.transition = `top ${transitionScrollTime}ms ease-in-out, opacity ${transitionScrollTime}ms ease-in-out`;
-                element.current.style.top = `${findButtonHeightByIndices(index, currentIndex)}px`;
-                element.current.style.opacity = findButtonOpacityByIndices(index + 1, currentIndex);
+                element.current!.style.transition = `top ${transitionScrollTime}ms ease-in-out, opacity ${transitionScrollTime}ms ease-in-out`;
+                element.current!.style.top = `${findButtonHeightByIndices(index, currentIndex)}px`;
+                element.current!.style.opacity = findButtonOpacityByIndices(index + 1, currentIndex).toString();
             });
         });
     }
 
-    function scrollTo(index) {
+    function scrollTo(index: number) {
         currentIndex = scrollPosition;
         while (currentIndex !== index) {
             scrollOnce(currentIndex < index, currentIndex);
             currentIndex = index > currentIndex ? currentIndex + 1 : currentIndex - 1;
         }
-
         setScrollPosition(index);
     };
 
-    const handleWheel = (event) => {
-        const delta = Math.sign(event.deltaY); // Positive for down, negative for up
-
+    const handleWheel = (event: React.WheelEvent) => {
+        const delta = Math.sign(event.deltaY);
         let newPosition = scrollPosition + delta;
-        newPosition = Math.max(1, Math.min(newPosition, numButtons)); // Clamp within bounds
-
-
+        newPosition = Math.max(1, Math.min(newPosition, numButtons));
         scrollTo(newPosition);
     };
 
-    const handleButtonClick = (index) => {
+    const handleButtonClick = (index: number) => {
         scrollTo(index);
     };
 
-    const handleSectionScroll = (ascending) => {
-        const sectionIndex = sections.findIndex((value) => {
-            return value > scrollPosition;
-        });
-        const isSectionIndex = sections.indexOf(scrollPosition) > 0;
-        if (sectionIndex < 0) {
-
-        }
-    }
-
-    const isButtonDisabled = (index) => {
+    const isButtonDisabled = (index: number) => {
         const distance = Math.abs(index - scrollPosition);
         return distance > buttonsVisible;
     };
 
     const buttons = Array.from({ length: numButtons }, (_, index) => {
-
         const buttonRef = buttonRefsByIndex[index];
-        const buttonStyle = {
+        const buttonStyle: React.CSSProperties = {
             transition: `top ${transitionScrollTime}ms ease-in-out, opacity ${transitionScrollTime}ms ease-in-out`,
             top: `${findButtonHeightByIndices(index, scrollPosition)}px`,
             opacity: findButtonOpacityByIndices(index + 1, scrollPosition),
@@ -178,7 +172,6 @@ function ButtonScroll({ numButtons, buttonsVisible, sections }) {
                 onClick={() => handleButtonClick(index + 1)}
                 disabled={isButtonDisabled(index + 1)}
                 active={scrollPosition === index + 1}
-                index={index + 1}
                 buttonRef={buttonRef}
                 buttonStyle={buttonStyle}
             >
