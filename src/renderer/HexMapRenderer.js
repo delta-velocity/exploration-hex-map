@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { Color, Vector3 } from 'three';
+import { Color, PerspectiveCamera, Vector3 } from 'three';
 import { HexMapData, TileData, TileVector } from '@/mapdata/MapData';
 import usePreloadTextures from '@/hooks/usePreloadTextures';
 import CustomCamera from './camera/CustomCamera';
 import Tile from './objects/Tile';
 import { useTextureStore } from './preloader/TexturePreloader';
+import { ObjectWithMenu } from './objects/testObject/ObjectWithMenu';
 
 function Background({ color }) {
     const { scene } = useThree();
@@ -54,10 +55,13 @@ const MapRenderer = () => {
         setFocused(false);
     }
 
-    return (
-        <Canvas style={{ height: '100vh', width: '100vw' }} onPointerEnter={() => handlePointerEnter()} onPointerLeave={() => handlePointerLeave()}>
+    const aspect = window.innerWidth / window.innerHeight;
+    const baseCamera = new PerspectiveCamera(50, aspect);
 
-            <CustomCamera target={new Vector3(0, 0, 0)} axis="Y" distance={5} viewAngle={Math.PI / 4} rotationAngle={Math.PI / 6} focused={focused} />
+    return (
+        <Canvas camera={baseCamera} style={{ height: '100vh', width: '100vw' }} onPointerEnter={() => handlePointerEnter()} onPointerLeave={() => handlePointerLeave()}>
+
+            <CustomCamera target={new Vector3(0, 0, 0)} axis="Y" distance={5} rotationAngle={Math.PI / 6} focused={focused} />
 
             <Background color={'#88ccff'} />
             <ambientLight intensity={0.5} />

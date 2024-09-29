@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
-import Hexagon from './Hexagon';
+import { SelectionHexagon } from './Hexagon';
 import { useTextureStore } from '../preloader/TexturePreloader';
+import { ObjectWithMenu } from './testObject/ObjectWithMenu';
+import { TileDataCard } from '@/components/UI/TileDataCard';
 
 class TerrainDetail {
     constructor(icon, xOffset, yOffset, isTop) {
@@ -45,19 +47,18 @@ function HexagonalPrism() {
 
             // Create the geometry for the hexagonal prism
             const geometry = new THREE.CylinderGeometry(sideLength, sideLength, height, 6);
-            const smallGeometry = new THREE.CylinderGeometry(sideLength * 0.99, sideLength * 0.99, height * 0.99, 6);
 
             // Create the material for the faces
             const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
             // Create the mesh for the faces
-            const mesh = new THREE.Mesh(smallGeometry, material);
-            // meshRef.current.add(mesh);
+            const mesh = new THREE.Mesh(geometry, material);
+            meshRef.current.add(mesh);
         }
     }, []);
 
     return (
-        <group ref={meshRef} />
+        <mesh ref={meshRef} />
     );
 }
 
@@ -74,13 +75,13 @@ function TileModel({ terrainDetails }) {
     const lushTexture = textures.hex.base.lush;
     
     return (
-        <group ref={groupRef}>
-            <Hexagon radius={1} holeRadius={0.5} height={height} />
+        <group ref={groupRef} position={[0, -height, 0]}>
+            <SelectionHexagon radius={1} holeRadius={0.5} height={height + 0.01} />
             <HexagonalPrism sideLength={sideLength} height={height} />
-            {terrainDetails.map((terrainDetail, i) => {
+            {/* {terrainDetails.map((terrainDetail, i) => {
                 const position = [terrainDetail.xOffset, terrainDetail.yOffset, (terrainDetail.isTop ? height / 2 : -height / 2)];
                 return <TerrainDetailModel key={i} position={position} scale={1} animation={swayTree} texture={lushTexture} />
-            })}
+            })} */}
         </group>
     );
 }
@@ -96,9 +97,12 @@ const Tile = ({ tileData }) => {
         tileVector.r * 1.5 // assuming 2D map, adjust for 3D if needed
     ];
 
+    const tileGroup = (<TileModel terrainDetails={tileData.tileRenderData} />);
     return (
         <group position={position}>
-            <TileModel terrainDetails={tileData.tileRenderData} />
+            <ObjectWithMenu group={tileGroup}>
+                <TileDataCard tileData={tileData}/>
+            </ObjectWithMenu>
         </group>
     );
 };

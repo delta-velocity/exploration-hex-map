@@ -1,18 +1,20 @@
 import { useMemo, useRef } from 'react';
 import { useLoader, useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import useCameraStore from '../camera/CameraStore';
 
-function Hexagon({ outerRadius = 1, thickness = 0.1, segments = 6, height = 0 }) {
+export function SelectionHexagon({ outerRadius = 1, thickness = 0.1, segments = 6, height = 0 }) {
     const meshRef = useRef();
     const { camera } = useThree();
+    const { translationOffset } = useCameraStore();
 
     const shape = useMemo(() => {
         const shape = new THREE.Shape();
 
         for (let i = 0; i < segments; i++) {
             const angle = (i / segments) * Math.PI * 2;
-            const x = Math.cos(angle) * outerRadius;
-            const y = Math.sin(angle) * outerRadius;
+            const x = Math.cos(angle) * outerRadius * 1.01;
+            const y = Math.sin(angle) * outerRadius * 1.01;
 
             if (i === 0) {
                 shape.moveTo(x, y);
@@ -69,5 +71,3 @@ function Hexagon({ outerRadius = 1, thickness = 0.1, segments = 6, height = 0 })
         </mesh>
     );
 }
-
-export default Hexagon;
