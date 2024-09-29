@@ -1,7 +1,8 @@
+'use client'
+
 import React, { useEffect, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { PerspectiveCamera, Vector3 } from "three";
-import { useControls } from "leva";
+import { Vector3 } from "three";
 import useKeyboard from "@/components/UI/useKeyboard";
 import { useSpring } from "react-spring";
 import useCameraStore from "./CameraStore";
@@ -135,7 +136,7 @@ const CustomCamera: React.FC<CustomCameraProps> = ({
             window.removeEventListener("wheel", handleWheel);
             window.removeEventListener("keydown", handleRotateView);
         };
-    }, [rotationAngle, zoomLevel]);
+    }, [rotationAngle, zoomLevel, rotationOffset, setZoomLevel]);
 
     const [translationSpring, api] = useSpring(() => ({
         x: translationOffset.x,
