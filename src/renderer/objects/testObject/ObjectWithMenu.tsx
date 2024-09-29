@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Html } from "@react-three/drei";
 import { Vector3 } from "three";
 import { ThreeEvent } from "@react-three/fiber";
