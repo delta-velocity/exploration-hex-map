@@ -1,5 +1,6 @@
 import { textureUrls } from '@/config/textureUrls';
 import { useTextureStore } from '@/renderer/preloader/TexturePreloader';
+import getConfig from 'next/config';
 import { useEffect } from 'react';
 import * as THREE from 'three';
 
